@@ -1,0 +1,10 @@
+<resources>
+    <string name="app_name">Item Manager</string>
+    <string name="title_buy">Buy</string>
+    <string name="title_return">Return</string>
+    <string name="title_activity_return">ReturnActivity</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="title_activity_maps">Map</string>
+</resources>
