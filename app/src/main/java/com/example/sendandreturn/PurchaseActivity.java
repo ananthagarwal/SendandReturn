@@ -1,6 +1,7 @@
 package com.example.sendandreturn;
 
 import android.content.Intent;
+import android.graphics.Camera;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -47,7 +48,7 @@ public class PurchaseActivity extends AppCompatActivity implements
     }
 
     public void changeAct() {
-        Intent intent = new Intent(this, MapsActivity.class);
+        Intent intent = new Intent(this, ReturnActivity.class);
         startActivity(intent);
     }
 
@@ -60,11 +61,11 @@ public class PurchaseActivity extends AppCompatActivity implements
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
 
 
-
+        //Possibly add a calendar feature later
         purchaseItemList = new ArrayList<>();
 
-        purchaseItemList.add(new PurchaseItem("Hi", 2.0, "bye", "hi"));
-        purchaseItemList.add(new PurchaseItem("Ananth", 2.0, "bye", "hi"));
+        purchaseItemList.add(new PurchaseItem("Hi", "bye", "hi"));
+        purchaseItemList.add(new PurchaseItem("Ananth","bye", "hi"));
 
 
 
@@ -76,11 +77,10 @@ public class PurchaseActivity extends AppCompatActivity implements
     }
 
     public void addItem(View view) {
-        FragmentManager fragmentManager = getSupportFragmentManager();
-        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-        AddItemFragment fragment = new AddItemFragment();
-        fragmentTransaction.add(R.id.content, fragment);
-        fragmentTransaction.commit();
+        Intent intent = new Intent(this, AddItemActivity.class);
+        startActivity(intent);
+
+
     }
 
 }
