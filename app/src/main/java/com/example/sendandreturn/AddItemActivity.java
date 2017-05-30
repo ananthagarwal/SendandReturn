@@ -1,5 +1,6 @@
 package com.example.sendandreturn;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Bitmap;
@@ -9,16 +10,24 @@ import android.provider.MediaStore;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.Toast;
+
+import static com.example.sendandreturn.PurchaseActivity.ADD_ITEM;
 
 public class AddItemActivity extends AppCompatActivity {
 
     static final int SELECT_IMAGE = 1;
+    private String itemName;
+    private String itemLocation;
+    private String notes;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_item);
+
     }
 
     public void openGallery(View view) {
@@ -28,6 +37,26 @@ public class AddItemActivity extends AppCompatActivity {
 
 
     }
+
+    public void done(View view) {
+        EditText editTextName = (EditText) findViewById(R.id.editTextName);
+        itemName = editTextName.getText().toString();
+
+        EditText editTextLocation = (EditText) findViewById(R.id.editTextLocation);
+        itemLocation = editTextLocation.getText().toString();
+
+        EditText editTextNotes = (EditText) findViewById(R.id.editTextNotes);
+        notes = editTextNotes.getText().toString();
+
+        Intent intent = new Intent(this, PurchaseActivity.class);
+        intent.putExtra("Name", itemName);
+        intent.putExtra("Location", itemLocation);
+        intent.putExtra("Notes", notes);
+        setResult(Activity.RESULT_OK, intent);
+        finish();
+
+    }
+
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
