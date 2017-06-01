@@ -7,9 +7,11 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ArrayAdapter;
@@ -22,7 +24,8 @@ import java.util.List;
 public class PurchaseActivity extends AppCompatActivity {
 
     private TextView mTextMessage;
-    private List<PurchaseItem> purchaseItemList;
+    private List<PurchaseItem> purchaseItemList = new ArrayList<>();
+
     static final int ADD_ITEM = 1;
 
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
@@ -45,8 +48,6 @@ public class PurchaseActivity extends AppCompatActivity {
 
     };
 
-    public void onFragmentInteraction(Uri uri) {
-    }
 
     public void changeAct() {
         Intent intent = new Intent(this, ReturnActivity.class);
@@ -63,7 +64,6 @@ public class PurchaseActivity extends AppCompatActivity {
 
 
         //Possibly add a calendar feature later
-        purchaseItemList = new ArrayList<>();
 
 
         purchaseItemList.add(new PurchaseItem("Hi", "bye", "hi"));

@@ -7,16 +7,27 @@ package com.example.sendandreturn;
 public class PurchaseItem {
     private String name;
     private String notes;
-    private String location;
+    private String store;
+    private String image;
 
     public PurchaseItem(String n, String note, String loc) {
         name = n;
         notes = note;
-        location = loc;
+        store = loc;
         // Add ability to specify location on Google Maps.
         //Image should be attained using the phone camera.
     }
 
+    public String getName() {
+        return name;
+    }
+
+    public String getImage() {
+        return image;
+    }
+    public String getStore() {
+        return store;
+    }
 
 
     @Override
