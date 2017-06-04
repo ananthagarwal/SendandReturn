@@ -32,17 +32,6 @@
         android:layout_toLeftOf="@+id/linearLayout2"
         android:layout_toStartOf="@+id/linearLayout2" />
 
-    <ImageView
-        android:id="@+id/item_infobutton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentEnd="true"
-        android:layout_alignParentRight="true"
-        android:layout_centerVertical="true"
-        android:layout_marginEnd="15dp"
-        android:layout_marginRight="15dp"
-        android:src="@android:drawable/ic_dialog_info" />
-
 
     <LinearLayout
         android:layout_width="wrap_content"
@@ -63,5 +52,14 @@
         android:layout_marginLeft="23dp"
         android:layout_marginStart="23dp"
         app:srcCompat="@drawable/common_google_signin_btn_icon_dark" />
+
+    <ImageButton
+        android:id="@+id/item_infobutton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:layout_centerVertical="true"
+        app:srcCompat="@android:drawable/ic_dialog_info" />
 
 </RelativeLayout>

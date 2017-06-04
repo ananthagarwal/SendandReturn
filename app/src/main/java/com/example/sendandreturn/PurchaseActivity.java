@@ -2,31 +2,27 @@ package com.example.sendandreturn;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.Camera;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 
 import java.util.ArrayList;
-import java.util.List;
 
 public class PurchaseActivity extends AppCompatActivity {
 
     private TextView mTextMessage;
     private ArrayList<PurchaseItem> purchaseItemList = new ArrayList<>();
     private static CustomAdapter adapter;
+    private PurchaseItem editedItem;
 
     static final int ADD_ITEM = 1;
+    static final int EDIT_ITEM = 2;
+
 
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
             = new BottomNavigationView.OnNavigationItemSelectedListener() {
@@ -68,7 +64,6 @@ public class PurchaseActivity extends AppCompatActivity {
 
         purchaseItemList.add(new PurchaseItem("Hi", "bye", "hi", null));
         purchaseItemList.add(new PurchaseItem("Ananth","bye", "hi", null));
-        purchaseItemList.add(new PurchaseItem("Hi", "bye", "hi", null));
 
 
         displayList();
@@ -76,32 +71,52 @@ public class PurchaseActivity extends AppCompatActivity {
     }
 
     public void addItem(View view) {
-        Intent intent = new Intent(this, AddItemActivity.class);
+        Intent intent = new Intent(this, ItemDetails.class);
+        intent.putExtra("EDIT", false);
         startActivityForResult(intent, ADD_ITEM);
+    }
 
-
+    public void editItem(View view, PurchaseItem purchaseItem) {
+        editedItem = purchaseItem;
+        Intent intent = new Intent(this, ItemDetails.class);
+        intent.putExtra("EDIT", true);
+        intent.putExtra("Name", purchaseItem.getName());
+        intent.putExtra("Location", purchaseItem.getStore());
+        intent.putExtra("Notes", purchaseItem.getNotes());
+        intent.putExtra("BitmapImage", purchaseItem.getImage());
+        startActivityForResult(intent, EDIT_ITEM);
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+
+        String name = data.getStringExtra("Name");
+        String location = data.getStringExtra("Location");
+        String notes = data.getStringExtra("Notes");
+        String picturePath = data.getStringExtra("BitmapImage");
         if (requestCode == ADD_ITEM && resultCode == Activity.RESULT_OK) {
-            String name = data.getStringExtra("Name");
-            String location = data.getStringExtra("Location");
-            String notes = data.getStringExtra("Notes");
-            String picturePath = data.getStringExtra("BitmapImage");
 
             PurchaseItem newItem = new PurchaseItem(name, location, notes, picturePath);
             purchaseItemList.add(newItem);
-            displayList();
+
+        } else if (requestCode == EDIT_ITEM && resultCode == Activity.RESULT_OK) {
+
+            editedItem.setImagePath(picturePath);
+            editedItem.setName(name);
+            editedItem.setStore(location);
+            editedItem.setNotes(notes);
 
         }
+
+        displayList();
     }
 
     private void displayList() {
-        adapter = new CustomAdapter(purchaseItemList, getApplicationContext());
+        adapter = new CustomAdapter(purchaseItemList, getApplicationContext(), this);
 
         ListView listView = (ListView) findViewById(R.id.purchaseListView);
         listView.setAdapter(adapter);
+
     }
 
 }

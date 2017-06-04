@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.media.Image;
 import android.net.Uri;
 import android.provider.MediaStore;
 import android.support.v7.app.AppCompatActivity;
@@ -16,7 +17,7 @@ import android.widget.Toast;
 
 import static com.example.sendandreturn.PurchaseActivity.ADD_ITEM;
 
-public class AddItemActivity extends AppCompatActivity {
+public class ItemDetails extends AppCompatActivity {
 
     static final int SELECT_IMAGE = 1;
     private String itemName;
@@ -29,13 +30,31 @@ public class AddItemActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_item);
 
+        Intent intent = getIntent();
+        if (intent.getBooleanExtra("EDIT", true)) {
+            EditText editTextName = (EditText) findViewById(R.id.editTextName);
+            String name = intent.getStringExtra("Name");
+            editTextName.setText(name);
+
+            EditText editTextLocation = (EditText) findViewById(R.id.editTextLocation);
+            String location = intent.getStringExtra("Location");
+            editTextLocation.setText(location);
+
+            EditText editTextNotes = (EditText) findViewById(R.id.editTextNotes);
+            String notes = intent.getStringExtra("Notes");
+            editTextNotes.setText(notes);
+
+            ImageView imageView = (ImageView) findViewById(R.id.purchaseItem);
+            String picturePath = intent.getStringExtra("BitmapImage");
+            imageView.setImageBitmap(BitmapFactory.decodeFile(picturePath));
+        }
+
     }
 
     public void openGallery(View view) {
 
         Intent intent = new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
         startActivityForResult(intent, SELECT_IMAGE);
-
 
     }
 

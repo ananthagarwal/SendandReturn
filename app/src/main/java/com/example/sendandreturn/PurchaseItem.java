@@ -25,6 +25,22 @@ public class PurchaseItem {
         return name;
     }
 
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public void setNotes(String notes) {
+        this.notes = notes;
+    }
+
+    public void setStore(String store) {
+        this.store = store;
+    }
+
+    public void setImagePath(String imagePath) {
+        this.imagePath = imagePath;
+    }
+
     public String getImage() {
         return imagePath;
     }

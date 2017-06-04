@@ -1,6 +1,8 @@
 package com.example.sendandreturn;
 
+import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.util.Log;
@@ -32,10 +34,11 @@ public class CustomAdapter extends ArrayAdapter<PurchaseItem> implements View.On
 
     }
 
-    public CustomAdapter(ArrayList<PurchaseItem> data, Context context) {
+    public CustomAdapter(ArrayList<PurchaseItem> data, Context context, PurchaseActivity purchaseActivity) {
         super(context, R.layout.row_item, data);
         dataBase = data;
         mContext = context;
+        this.purchaseActivity = purchaseActivity;
 
     }
     @Override
@@ -46,11 +49,13 @@ public class CustomAdapter extends ArrayAdapter<PurchaseItem> implements View.On
 
         switch (view.getId()) {
             case R.id.item_infobutton:
-                Log.d("HIIIIIIIII", Integer.toString(position));
+                purchaseActivity.editItem(view, purchaseItem);
                 break;
+
         }
 
     }
+
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
