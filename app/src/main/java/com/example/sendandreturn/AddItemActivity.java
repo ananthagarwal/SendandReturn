@@ -22,6 +22,7 @@ public class AddItemActivity extends AppCompatActivity {
     private String itemName;
     private String itemLocation;
     private String notes;
+    private String picturePath;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,6 +53,7 @@ public class AddItemActivity extends AppCompatActivity {
         intent.putExtra("Name", itemName);
         intent.putExtra("Location", itemLocation);
         intent.putExtra("Notes", notes);
+        intent.putExtra("BitmapImage", picturePath);
         setResult(Activity.RESULT_OK, intent);
         finish();
 
@@ -71,7 +73,7 @@ public class AddItemActivity extends AppCompatActivity {
                 Cursor cursor = getContentResolver().query(selectedImage,filePathColumn, null, null, null);
                 cursor.moveToFirst();
                 int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
-                String picturePath = cursor.getString(columnIndex);
+                picturePath = cursor.getString(columnIndex);
                 cursor.close();
                 // The user picked a contact.
                 // The Intent's data Uri identifies which contact was selected.
