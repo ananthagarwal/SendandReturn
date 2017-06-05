@@ -2,16 +2,27 @@ package com.example.sendandreturn;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
+
+import com.baoyz.swipemenulistview.SwipeMenu;
+import com.baoyz.swipemenulistview.SwipeMenuCreator;
+import com.baoyz.swipemenulistview.SwipeMenuItem;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 
 public class PurchaseActivity extends AppCompatActivity {
 
@@ -38,6 +49,7 @@ public class PurchaseActivity extends AppCompatActivity {
                     changeAct();
                     //mTextMessage.setText(R.string.title_notifications);
                     return true;
+
             }
             return false;
         }
@@ -48,12 +60,25 @@ public class PurchaseActivity extends AppCompatActivity {
     public void changeAct() {
         Intent intent = new Intent(this, ReturnActivity.class);
         startActivity(intent);
+
     }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_purchase);
+
+        if (savedInstanceState == null) {
+            Log.d("Hap9fenoawi", "HIIInpaufiewokII");
+
+        }
+
+        if (savedInstanceState != null) {
+            PurchaseItem[] purchaseItems = (PurchaseItem[]) savedInstanceState.getParcelableArray("Saved List Elements");
+            purchaseItemList = new ArrayList<>(Arrays.asList(purchaseItems));
+            Log.d("Hi", "HIIIII");
+
+        }
 
         BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.navigation);
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
@@ -62,8 +87,8 @@ public class PurchaseActivity extends AppCompatActivity {
         //Possibly add a calendar feature later
 
 
-        purchaseItemList.add(new PurchaseItem("Hi", "bye", "hi", null));
-        purchaseItemList.add(new PurchaseItem("Ananth","bye", "hi", null));
+        purchaseItemList.add(new PurchaseItem("Video Game", "Best Buy", "New Mario Game", null));
+        purchaseItemList.add(new PurchaseItem("IPhone","Target", "Need a new phone", null));
 
 
         displayList();
@@ -107,16 +132,23 @@ public class PurchaseActivity extends AppCompatActivity {
             editedItem.setNotes(notes);
 
         }
-
         displayList();
     }
 
     private void displayList() {
         adapter = new CustomAdapter(purchaseItemList, getApplicationContext(), this);
 
+
         ListView listView = (ListView) findViewById(R.id.purchaseListView);
         listView.setAdapter(adapter);
-
     }
+
+
+    @Override
+    public void onSaveInstanceState(Bundle outstate) {
+        super.onSaveInstanceState(outstate);
+        outstate.putParcelableArray("Saved List Elements", purchaseItemList.toArray(new PurchaseItem[purchaseItemList.size()]));
+    }
+
 
 }
