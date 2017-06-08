@@ -35,9 +35,9 @@ public class PurchaseActivity extends AppCompatActivity {
     private ArrayList<PurchaseItem> purchaseItemList = new ArrayList<>();
     private static CustomAdapter adapter;
     private PurchaseItem editedItem;
-    DatabaseHelper mDbHelper = new DatabaseHelper(getApplicationContext());
-    SQLiteDatabase db = mDbHelper.getWritableDatabase();
-    SQLiteDatabase dbRead = mDbHelper.getReadableDatabase();
+    DatabaseHelper mDbHelper;
+    SQLiteDatabase db;
+    SQLiteDatabase dbRead;
 
     static final int ADD_ITEM = 1;
     static final int EDIT_ITEM = 2;
@@ -68,7 +68,6 @@ public class PurchaseActivity extends AppCompatActivity {
     public void changeAct() {
         Intent intent = new Intent(this, ReturnActivity.class);
         startActivity(intent);
-
     }
 
     @Override
@@ -76,23 +75,24 @@ public class PurchaseActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_purchase);
 
-        Cursor cursor = dbRead.rawQuery("SELECT * FROM " + DatabaseHelper.DATABASE_NAME, null);
+        mDbHelper = new DatabaseHelper(getApplicationContext());
+        dbRead = mDbHelper.getReadableDatabase();
+
+        Cursor cursor = dbRead.rawQuery("SELECT * FROM " + DatabaseContract.Row.TABLE_NAME, null);
         if (cursor.getCount() != 0) {
             while(cursor.moveToNext()) {
                 Log.d("Purchase Activity", "Inside the Database Reader");
                 String name = cursor.getString(cursor.getColumnIndexOrThrow("Name"));
                 String notes = cursor.getString(cursor.getColumnIndexOrThrow("Notes"));
-                String store = cursor.getString(cursor.getColumnIndexOrThrow("Location"));
-                String picture = cursor.getString(cursor.getColumnIndexOrThrow("BitmapImage"));
+                String store = cursor.getString(cursor.getColumnIndexOrThrow("Store"));
+                String picture = cursor.getString(cursor.getColumnIndexOrThrow("Image"));
                 PurchaseItem purchaseItem = new PurchaseItem(name, store, notes, picture);
                 purchaseItemList.add(purchaseItem);
             }
             cursor.close();
+            dbRead.close();
         }
 
-        if (savedInstanceState == null) {
-            Toast.makeText(getApplicationContext(), "I AM NULL", Toast.LENGTH_LONG).show();
-        }
 
         if (savedInstanceState != null) {
             PurchaseItem[] purchaseItems = (PurchaseItem[]) savedInstanceState.getParcelableArray("Saved List Elements");
@@ -110,8 +110,8 @@ public class PurchaseActivity extends AppCompatActivity {
         //Possibly add a calendar feature later
 
 
-        purchaseItemList.add(new PurchaseItem("Video Game", "Best Buy", "New Mario Game", "/storage/sdcard1/Pictures/wallpaper_13.jpg"));
-        purchaseItemList.add(new PurchaseItem("IPhone","Target", "Need a new phone", "/storage/sdcard1/Pictures/wallpaper_13.jpg"));
+        //purchaseItemList.add(new PurchaseItem("Video Game", "Best Buy", "New Mario Game", "/storage/sdcard1/Pictures/wallpaper_13.jpg"));
+        //purchaseItemList.add(new PurchaseItem("IPhone","Target", "Need a new phone", "/storage/sdcard1/Pictures/wallpaper_13.jpg"));
 
 
         displayList();
@@ -162,8 +162,9 @@ public class PurchaseActivity extends AppCompatActivity {
         values.put(DatabaseContract.Row.COLUMN_NAME_NOTES, notes);
         values.put(DatabaseContract.Row.COLUMN_NAME_STORE, location);
         values.put(DatabaseContract.Row.COLUMN_NAME_IMAGE, picturePath);
-
+        db = mDbHelper.getWritableDatabase();
         long newRowId = db.insert(DatabaseContract.Row.TABLE_NAME, null, values);
+        db.close();
 
 
 
