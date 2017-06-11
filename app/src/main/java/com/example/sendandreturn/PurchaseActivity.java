@@ -14,8 +14,11 @@ import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.ContextMenu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -99,6 +102,7 @@ public class PurchaseActivity extends AppCompatActivity {
             Log.d("Hi", "HIIIII");
         }
 
+
         BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.navigation);
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
 
@@ -110,7 +114,6 @@ public class PurchaseActivity extends AppCompatActivity {
         //purchaseItemList.add(new PurchaseItem("IPhone","Target", "Need a new phone", "/storage/sdcard1/Pictures/wallpaper_13.jpg"));
 
         displayList();
-
     }
 
     public void addItem(View view) {
@@ -178,9 +181,8 @@ public class PurchaseActivity extends AppCompatActivity {
 
     private void displayList() {
         adapter = new CustomAdapter(purchaseItemList, getApplicationContext(), this);
-
-
         ListView listView = (ListView) findViewById(R.id.purchaseListView);
+        registerForContextMenu(listView);
         listView.setAdapter(adapter);
     }
 
@@ -202,6 +204,45 @@ public class PurchaseActivity extends AppCompatActivity {
     public void onDestroy() {
         super.onDestroy();
         Log.d("HIII", "I WAS Destroyed");
+    }
+
+    @Override
+    public void onCreateContextMenu(ContextMenu menu, View v,
+                                    ContextMenu.ContextMenuInfo menuInfo) {
+        super.onCreateContextMenu(menu, v, menuInfo);
+        Log.d("Purchase Activity", "Creating Context Menu");
+
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.context_menu, menu);
+    }
+
+    @Override
+    public boolean onContextItemSelected(MenuItem item) {
+        AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
+        switch (item.getItemId()) {
+            case R.id.delete:
+                item.setChecked(true);
+                delete(info.position);
+                return true;
+            default:
+                return super.onContextItemSelected(item);
+        }
+    }
+
+    private void delete(int position) {
+        Log.d("Purchase Activity", "Deleting " + position);
+        PurchaseItem toDelete = purchaseItemList.get(position);
+        db = mDbHelper.getWritableDatabase();
+
+        String selection = DatabaseContract.Row.COLUMN_NAME_NAME + " = ? AND " +
+                DatabaseContract.Row.COLUMN_NAME_NOTES + " = ? AND " + DatabaseContract.Row.COLUMN_NAME_STORE + " = ?";
+    // Specify arguments in placeholder order.
+        String[] selectionArgs = { toDelete.getName(), toDelete.getNotes(), toDelete.getStore() };
+    // Issue SQL statement.
+        db.delete(DatabaseContract.Row.TABLE_NAME, selection, selectionArgs);
+
+        purchaseItemList.remove(position);
+        displayList();
     }
 
 }

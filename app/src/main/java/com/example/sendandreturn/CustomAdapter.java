@@ -18,10 +18,10 @@ import java.util.ArrayList;
  * Created by ananthagarwal on 5/31/17.
  */
 
-public class CustomAdapter extends ArrayAdapter<PurchaseItem> implements View.OnClickListener{
+class CustomAdapter extends ArrayAdapter<PurchaseItem> implements View.OnClickListener{
 
     private ArrayList<PurchaseItem> dataBase;
-    Context mContext;
+    private Context mContext;
     private static LayoutInflater inflater = null;
     private PurchaseActivity purchaseActivity;
 
