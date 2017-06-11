@@ -83,6 +83,7 @@ public class CustomAdapter extends ArrayAdapter<PurchaseItem> implements View.On
         viewHolder.info.setTag(position);
 
         return convertView;
+
     }
 }
 

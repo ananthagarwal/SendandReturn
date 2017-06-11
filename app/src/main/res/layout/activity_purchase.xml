@@ -18,9 +18,10 @@
         <ListView
             android:id="@+id/purchaseListView"
             android:layout_width="match_parent"
-            android:layout_height="391dp" />
+            android:layout_height="match_parent" />
 
     </FrameLayout>
+
 
     <LinearLayout
         android:layout_width="fill_parent"
@@ -29,27 +30,22 @@
 
         >
 
-        <Button
-            android:id="@+id/addItem"
-            android:layout_width="122dp"
-            android:layout_height="match_parent"
-            android:text="Add Item"
-            android:onClick="addItem"
-            android:textColor="@android:color/holo_green_dark" />
-
-        <Button
-            android:id="@+id/button5"
-            android:layout_width="122dp"
-            android:layout_height="match_parent"
-            android:text="Edit Item" />
-
-        <Button
-            android:id="@+id/button7"
-            android:layout_width="122dp"
-            android:layout_height="match_parent"
-            android:text="Remove Item" />
 
     </LinearLayout>
+
+    <Button
+        android:id="@+id/addItem"
+        style="@style/Widget.AppCompat.Button"
+        android:layout_width="match_parent"
+        android:layout_height="35dp"
+        android:background="@android:color/holo_blue_bright"
+        android:elevation="0dp"
+
+        android:onClick="addItem"
+        android:text="+"
+        android:textColor="@android:color/background_light"
+        android:textSize="24sp"
+        app:srcCompat="@android:drawable/ic_dialog_email" />
 
     <android.support.design.widget.BottomNavigationView
         android:id="@+id/navigation"

@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.MenuItem;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
@@ -27,6 +28,7 @@ public class ReturnActivity extends AppCompatActivity {
             switch (item.getItemId()) {
                 case R.id.navigation_buy:
                     changeAct();
+                    //onBackPressed();
                     //mTextMessage.setText(R.string.title_home);
                     return true;
                 case R.id.navigation_return:

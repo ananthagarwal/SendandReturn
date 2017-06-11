@@ -93,15 +93,11 @@ public class PurchaseActivity extends AppCompatActivity {
             dbRead.close();
         }
 
-
         if (savedInstanceState != null) {
             PurchaseItem[] purchaseItems = (PurchaseItem[]) savedInstanceState.getParcelableArray("Saved List Elements");
             purchaseItemList = new ArrayList<>(Arrays.asList(purchaseItems));
             Log.d("Hi", "HIIIII");
-
         }
-
-
 
         BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.navigation);
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
@@ -112,7 +108,6 @@ public class PurchaseActivity extends AppCompatActivity {
 
         //purchaseItemList.add(new PurchaseItem("Video Game", "Best Buy", "New Mario Game", "/storage/sdcard1/Pictures/wallpaper_13.jpg"));
         //purchaseItemList.add(new PurchaseItem("IPhone","Target", "Need a new phone", "/storage/sdcard1/Pictures/wallpaper_13.jpg"));
-
 
         displayList();
 
@@ -143,30 +138,41 @@ public class PurchaseActivity extends AppCompatActivity {
         String location = data.getStringExtra("Location");
         String notes = data.getStringExtra("Notes");
         String picturePath = data.getStringExtra("BitmapImage");
-        if (requestCode == ADD_ITEM && resultCode == Activity.RESULT_OK) {
-
-            PurchaseItem newItem = new PurchaseItem(name, location, notes, picturePath);
-            purchaseItemList.add(newItem);
-
-        } else if (requestCode == EDIT_ITEM && resultCode == Activity.RESULT_OK) {
-
-            editedItem.setImagePath(picturePath);
-            editedItem.setName(name);
-            editedItem.setStore(location);
-            editedItem.setNotes(notes);
-
-        }
-        displayList();
         ContentValues values = new ContentValues();
         values.put(DatabaseContract.Row.COLUMN_NAME_NAME, name);
         values.put(DatabaseContract.Row.COLUMN_NAME_NOTES, notes);
         values.put(DatabaseContract.Row.COLUMN_NAME_STORE, location);
         values.put(DatabaseContract.Row.COLUMN_NAME_IMAGE, picturePath);
-        db = mDbHelper.getWritableDatabase();
-        long newRowId = db.insert(DatabaseContract.Row.TABLE_NAME, null, values);
-        db.close();
 
+        if (requestCode == ADD_ITEM && resultCode == Activity.RESULT_OK) {
 
+            PurchaseItem newItem = new PurchaseItem(name, location, notes, picturePath);
+            purchaseItemList.add(newItem);
+
+            db = mDbHelper.getWritableDatabase();
+            long newRowId = db.insert(DatabaseContract.Row.TABLE_NAME, null, values);
+            db.close();
+
+        } else if (requestCode == EDIT_ITEM && resultCode == Activity.RESULT_OK) {
+
+            dbRead = mDbHelper.getReadableDatabase();
+            Log.d("Purchase Activity", "Looking for updates");
+            Log.d("Purchase Activity", values.toString() + editedItem.getName() + editedItem.getImage());
+            int count = dbRead.update(DatabaseContract.Row.TABLE_NAME,
+                    values, DatabaseContract.Row.COLUMN_NAME_NAME + " = ? AND " + DatabaseContract.Row.COLUMN_NAME_NOTES + " = ? AND " +
+                            DatabaseContract.Row.COLUMN_NAME_STORE + " = ?",
+                    new String[]{editedItem.getName(), editedItem.getNotes(), editedItem.getStore()
+                            });
+            Log.d("Purchase Activity", mDbHelper.getTableAsString(dbRead, DatabaseContract.Row.TABLE_NAME));
+            Log.d("Purchase Activity", "" + count);
+            System.out.println("HI this works");
+            editedItem.setImagePath(picturePath);
+            editedItem.setName(name);
+            editedItem.setStore(location);
+            editedItem.setNotes(notes);
+            dbRead.close();
+        }
+        displayList();
 
     }
 
