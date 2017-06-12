@@ -3,11 +3,9 @@ package com.example.sendandreturn;
 import android.app.Activity;
 import android.content.ContentValues;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
-import android.os.Parcelable;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v7.app.AppCompatActivity;
@@ -17,19 +15,16 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 
-import static java.security.AccessController.getContext;
-
 public class PurchaseActivity extends AppCompatActivity {
 
-    private ArrayList<PurchaseItem> purchaseItemList = new ArrayList<>();
-    private static CustomAdapter adapter;
-    private PurchaseItem editedItem;
+    private ArrayList<Item> itemList = new ArrayList<>();
+    private CustomAdapter adapter;
+    private Item editedItem;
     DatabaseHelper mDbHelper;
     SQLiteDatabase db;
     SQLiteDatabase dbRead;
@@ -73,7 +68,8 @@ public class PurchaseActivity extends AppCompatActivity {
         mDbHelper = new DatabaseHelper(getApplicationContext());
         dbRead = mDbHelper.getReadableDatabase();
 
-        Cursor cursor = dbRead.rawQuery("SELECT * FROM " + DatabaseContract.Row.TABLE_NAME, null);
+        Cursor cursor = dbRead.rawQuery("SELECT * FROM " + DatabaseContract.Row.TABLE_NAME + " WHERE "
+                + DatabaseContract.Row.COLUMN_NAME_PURCHASE + " = ?", new String[]{"Yes"});
         if (cursor.getCount() != 0) {
             while(cursor.moveToNext()) {
                 Log.d("Purchase Activity", "Inside the Database Reader");
@@ -81,16 +77,16 @@ public class PurchaseActivity extends AppCompatActivity {
                 String notes = cursor.getString(cursor.getColumnIndexOrThrow("Notes"));
                 String store = cursor.getString(cursor.getColumnIndexOrThrow("Store"));
                 String picture = cursor.getString(cursor.getColumnIndexOrThrow("Image"));
-                PurchaseItem purchaseItem = new PurchaseItem(name, store, notes, picture);
-                purchaseItemList.add(purchaseItem);
+                Item item = new Item(name, store, notes, picture);
+                itemList.add(item);
             }
             cursor.close();
             dbRead.close();
         }
 
         if (savedInstanceState != null) {
-            PurchaseItem[] purchaseItems = (PurchaseItem[]) savedInstanceState.getParcelableArray("Saved List Elements");
-            purchaseItemList = new ArrayList<>(Arrays.asList(purchaseItems));
+            Item[] items = (Item[]) savedInstanceState.getParcelableArray("Saved List Elements");
+            itemList = new ArrayList<>(Arrays.asList(items));
             Log.d("Hi", "HIIIII");
         }
 
@@ -102,8 +98,8 @@ public class PurchaseActivity extends AppCompatActivity {
         //Possibly add a calendar feature later
 
 
-        //purchaseItemList.add(new PurchaseItem("Video Game", "Best Buy", "New Mario Game", "/storage/sdcard1/Pictures/wallpaper_13.jpg"));
-        //purchaseItemList.add(new PurchaseItem("IPhone","Target", "Need a new phone", "/storage/sdcard1/Pictures/wallpaper_13.jpg"));
+        //itemList.add(new Item("Video Game", "Best Buy", "New Mario Game", "/storage/sdcard1/Pictures/wallpaper_13.jpg"));
+        //itemList.add(new Item("IPhone","Target", "Need a new phone", "/storage/sdcard1/Pictures/wallpaper_13.jpg"));
 
         displayList();
     }
@@ -116,14 +112,14 @@ public class PurchaseActivity extends AppCompatActivity {
 
 
 
-    public void editItem(View view, PurchaseItem purchaseItem) {
-        editedItem = purchaseItem;
+    public void editItem(View view, Item item) {
+        editedItem = item;
         Intent intent = new Intent(this, ItemDetails.class);
         intent.putExtra("EDIT", true);
-        intent.putExtra("Name", purchaseItem.getName());
-        intent.putExtra("Location", purchaseItem.getStore());
-        intent.putExtra("Notes", purchaseItem.getNotes());
-        intent.putExtra("BitmapImage", purchaseItem.getImage());
+        intent.putExtra("Name", item.getName());
+        intent.putExtra("Location", item.getStore());
+        intent.putExtra("Notes", item.getNotes());
+        intent.putExtra("BitmapImage", item.getImage());
         startActivityForResult(intent, EDIT_ITEM);
     }
 
@@ -134,16 +130,20 @@ public class PurchaseActivity extends AppCompatActivity {
         String location = data.getStringExtra("Location");
         String notes = data.getStringExtra("Notes");
         String picturePath = data.getStringExtra("BitmapImage");
+        String purchase = "Yes";
+
         ContentValues values = new ContentValues();
         values.put(DatabaseContract.Row.COLUMN_NAME_NAME, name);
         values.put(DatabaseContract.Row.COLUMN_NAME_NOTES, notes);
         values.put(DatabaseContract.Row.COLUMN_NAME_STORE, location);
         values.put(DatabaseContract.Row.COLUMN_NAME_IMAGE, picturePath);
+        values.put(DatabaseContract.Row.COLUMN_NAME_PURCHASE, purchase);
+
 
         if (requestCode == ADD_ITEM && resultCode == Activity.RESULT_OK) {
 
-            PurchaseItem newItem = new PurchaseItem(name, location, notes, picturePath);
-            purchaseItemList.add(newItem);
+            Item newItem = new Item(name, location, notes, picturePath);
+            itemList.add(newItem);
 
             db = mDbHelper.getWritableDatabase();
             long newRowId = db.insert(DatabaseContract.Row.TABLE_NAME, null, values);
@@ -173,7 +173,7 @@ public class PurchaseActivity extends AppCompatActivity {
     }
 
     private void displayList() {
-        adapter = new CustomAdapter(purchaseItemList, getApplicationContext(), this);
+        adapter = new CustomAdapter(itemList, getApplicationContext(), this);
         ListView listView = (ListView) findViewById(R.id.purchaseListView);
         registerForContextMenu(listView);
         listView.setAdapter(adapter);
@@ -184,7 +184,7 @@ public class PurchaseActivity extends AppCompatActivity {
     public void onSaveInstanceState(Bundle outstate) {
         super.onSaveInstanceState(outstate);
         Log.d("HIII", "I am in saveInstanceState");
-        outstate.putParcelableArray("Saved List Elements", purchaseItemList.toArray(new PurchaseItem[purchaseItemList.size()]));
+        outstate.putParcelableArray("Saved List Elements", itemList.toArray(new Item[itemList.size()]));
     }
 
     @Override
@@ -224,7 +224,7 @@ public class PurchaseActivity extends AppCompatActivity {
 
     private void delete(int position) {
         Log.d("Purchase Activity", "Deleting " + position);
-        PurchaseItem toDelete = purchaseItemList.get(position);
+        Item toDelete = itemList.get(position);
         db = mDbHelper.getWritableDatabase();
 
         String selection = DatabaseContract.Row.COLUMN_NAME_NAME + " = ? AND " +
@@ -234,7 +234,7 @@ public class PurchaseActivity extends AppCompatActivity {
     // Issue SQL statement.
         db.delete(DatabaseContract.Row.TABLE_NAME, selection, selectionArgs);
 
-        purchaseItemList.remove(position);
+        itemList.remove(position);
         displayList();
     }
 

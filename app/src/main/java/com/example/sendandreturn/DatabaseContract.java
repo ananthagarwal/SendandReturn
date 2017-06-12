@@ -6,17 +6,17 @@ import android.provider.BaseColumns;
  * Created by ananthagarwal on 6/6/17.
  */
 
-public class DatabaseContract {
+class DatabaseContract {
 
     private DatabaseContract() {}
 
-    public static class Row implements BaseColumns {
-        public static final String TABLE_NAME = "PurchaseandReturnItems";
-        public static final String COLUMN_NAME_NAME = "Name";
-        public static final String COLUMN_NAME_NOTES = "Notes";
-        public static final String COLUMN_NAME_STORE = "Store";
-        public static final String COLUMN_NAME_IMAGE = "Image";
-
+     static class Row implements BaseColumns {
+        static final String TABLE_NAME = "PurchaseandReturnItems";
+        static final String COLUMN_NAME_NAME = "Name";
+        static final String COLUMN_NAME_NOTES = "Notes";
+        static final String COLUMN_NAME_STORE = "Store";
+        static final String COLUMN_NAME_IMAGE = "Image";
+        static final String COLUMN_NAME_PURCHASE = "Purchase";
 
     }
 }

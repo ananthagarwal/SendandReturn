@@ -21,7 +21,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                     DatabaseContract.Row.COLUMN_NAME_NAME + " TEXT, " +
                     DatabaseContract.Row.COLUMN_NAME_NOTES + " TEXT, " +
                     DatabaseContract.Row.COLUMN_NAME_STORE + " TEXT, " +
-                    DatabaseContract.Row.COLUMN_NAME_IMAGE + " TEXT" + " )";
+                    DatabaseContract.Row.COLUMN_NAME_IMAGE + " TEXT, " +
+                    DatabaseContract.Row.COLUMN_NAME_PURCHASE + " TEXT" + " )";
 
     private static final String SQL_DELETE_ENTRIES =
             "DROP TABLE IF EXISTS " + DatabaseContract.Row.TABLE_NAME;

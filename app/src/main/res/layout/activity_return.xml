@@ -14,18 +14,26 @@
         android:layout_height="0dp"
         android:layout_weight="1">
 
-        <Button
-            android:id="@+id/button"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Button" />
-
         <ListView
             android:id="@+id/returnListView"
             android:layout_width="match_parent"
             android:layout_height="match_parent" />
 
     </FrameLayout>
+
+    <Button
+        android:id="@+id/addItem2"
+        style="@style/Widget.AppCompat.Button"
+        android:layout_width="match_parent"
+        android:layout_height="35dp"
+        android:background="@android:color/holo_blue_bright"
+        android:elevation="0dp"
+
+        android:onClick="addItem"
+        android:text="+"
+        android:textColor="@android:color/background_light"
+        android:textSize="24sp"
+        app:srcCompat="@android:drawable/ic_dialog_email" />
 
     <android.support.design.widget.BottomNavigationView
         android:id="@+id/navigation"

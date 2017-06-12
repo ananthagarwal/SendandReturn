@@ -1,11 +1,7 @@
 package com.example.sendandreturn;
 
-import android.app.Activity;
 import android.content.Context;
-import android.content.Intent;
-import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,12 +14,14 @@ import java.util.ArrayList;
  * Created by ananthagarwal on 5/31/17.
  */
 
-class CustomAdapter extends ArrayAdapter<PurchaseItem> implements View.OnClickListener{
+class CustomAdapter extends ArrayAdapter<Item> implements View.OnClickListener{
 
-    private ArrayList<PurchaseItem> dataBase;
+    private ArrayList<Item> dataBase;
     private Context mContext;
     private static LayoutInflater inflater = null;
     private PurchaseActivity purchaseActivity;
+    private ReturnActivity returnActivity;
+
 
 
     public static class ViewHolder {
@@ -34,22 +32,34 @@ class CustomAdapter extends ArrayAdapter<PurchaseItem> implements View.OnClickLi
 
     }
 
-    public CustomAdapter(ArrayList<PurchaseItem> data, Context context, PurchaseActivity purchaseActivity) {
+    public CustomAdapter(ArrayList<Item> data, Context context, PurchaseActivity purchaseActivity) {
         super(context, R.layout.row_item, data);
         dataBase = data;
         mContext = context;
         this.purchaseActivity = purchaseActivity;
 
     }
+
+    public CustomAdapter(ArrayList<Item> data, Context context, ReturnActivity purchaseActivity) {
+        super(context, R.layout.row_item, data);
+        dataBase = data;
+        mContext = context;
+        this.returnActivity = purchaseActivity;
+
+    }
     @Override
     public void onClick(View view) {
 
         int position = (int) view.getTag();
-        PurchaseItem purchaseItem = (PurchaseItem) getItem(position);
+        Item item = (Item) getItem(position);
 
         switch (view.getId()) {
             case R.id.item_infobutton:
-                purchaseActivity.editItem(view, purchaseItem);
+                if (purchaseActivity != null) {
+                    purchaseActivity.editItem(view, item);
+                } else {
+                    returnActivity.editItem(view, item);
+                }
                 break;
 
         }
@@ -59,7 +69,7 @@ class CustomAdapter extends ArrayAdapter<PurchaseItem> implements View.OnClickLi
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-        PurchaseItem purchaseItem = getItem(position);
+        Item item = getItem(position);
         ViewHolder viewHolder;
         final View result;
         if (convertView == null) {
@@ -76,9 +86,9 @@ class CustomAdapter extends ArrayAdapter<PurchaseItem> implements View.OnClickLi
             viewHolder = (ViewHolder) convertView.getTag();
             result = convertView;
         }
-        viewHolder.name.setText(purchaseItem.getName());
-        viewHolder.image.setImageBitmap(BitmapFactory.decodeFile(purchaseItem.getImage()));
-        viewHolder.store.setText(purchaseItem.getStore());
+        viewHolder.name.setText(item.getName());
+        viewHolder.image.setImageBitmap(BitmapFactory.decodeFile(item.getImage()));
+        viewHolder.store.setText(item.getStore());
         viewHolder.info.setOnClickListener(this);
         viewHolder.info.setTag(position);
 

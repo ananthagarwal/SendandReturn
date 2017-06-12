@@ -1,6 +1,5 @@
 package com.example.sendandreturn;
 
-import android.graphics.Bitmap;
 import android.os.Parcel;
 import android.os.Parcelable;
 
@@ -8,23 +7,23 @@ import android.os.Parcelable;
  * Created by ananthagarwal on 5/28/17.
  */
 
-public class PurchaseItem implements Parcelable{
+public class Item implements Parcelable{
     private String name;
     private String notes;
     private String store;
     private String imagePath;
 
-    public static final Parcelable.Creator<PurchaseItem> CREATOR
-            = new Parcelable.Creator<PurchaseItem>() {
-        public PurchaseItem createFromParcel(Parcel in) {
-            return new PurchaseItem(in);
+    public static final Parcelable.Creator<Item> CREATOR
+            = new Parcelable.Creator<Item>() {
+        public Item createFromParcel(Parcel in) {
+            return new Item(in);
         }
 
-        public PurchaseItem[] newArray(int size) {
-            return new PurchaseItem[size];
+        public Item[] newArray(int size) {
+            return new Item[size];
         }
     };
-    public PurchaseItem(String n, String loc, String note, String image) {
+    public Item(String n, String loc, String note, String image) {
         name = n;
         notes = note;
         store = loc;
@@ -33,7 +32,7 @@ public class PurchaseItem implements Parcelable{
         //Image should be attained using the phone camera.
     }
 
-    public PurchaseItem(Parcel parcel) {
+    public Item(Parcel parcel) {
         String[] input = new String[4];
         parcel.readStringArray(input);
 

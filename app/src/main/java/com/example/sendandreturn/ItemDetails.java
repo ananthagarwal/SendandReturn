@@ -52,7 +52,7 @@ public class ItemDetails extends AppCompatActivity implements OnMapReadyCallback
             String notes = intent.getStringExtra("Notes");
             editTextNotes.setText(notes);
 
-            ImageView imageView = (ImageView) findViewById(R.id.purchaseItem);
+            ImageView imageView = (ImageView) findViewById(R.id.item);
             String picturePath = intent.getStringExtra("BitmapImage");
             imageView.setImageBitmap(BitmapFactory.decodeFile(picturePath));
         }
@@ -130,7 +130,7 @@ public class ItemDetails extends AppCompatActivity implements OnMapReadyCallback
                 // The Intent's data Uri identifies which contact was selected.
 
 
-                ImageView imageView = (ImageView) findViewById(R.id.purchaseItem);
+                ImageView imageView = (ImageView) findViewById(R.id.item);
                 imageView.setVisibility(View.VISIBLE);
                 imageView.setImageURI(selectedImage);
                 imageView.setImageBitmap(BitmapFactory.decodeFile(picturePath));
