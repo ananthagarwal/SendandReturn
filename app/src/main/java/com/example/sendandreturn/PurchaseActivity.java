@@ -46,6 +46,7 @@ public class PurchaseActivity extends AppCompatActivity {
                 case R.id.navigation_return:
                     changeAct();
                     //mTextMessage.setText(R.string.title_notifications);
+                    Log.d("Purchase Activity", "Changing activity");
                     return true;
 
             }
@@ -88,6 +89,7 @@ public class PurchaseActivity extends AppCompatActivity {
             Item[] items = (Item[]) savedInstanceState.getParcelableArray("Saved List Elements");
             itemList = new ArrayList<>(Arrays.asList(items));
             Log.d("Hi", "HIIIII");
+
         }
 
 

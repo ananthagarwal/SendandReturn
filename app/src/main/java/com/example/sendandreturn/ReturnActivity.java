@@ -70,6 +70,7 @@ public class ReturnActivity extends AppCompatActivity {
 
         returnItemList = new ArrayList<>();
 
+
         mDbHelper2 = new DatabaseHelper(getApplicationContext());
         dbRead = mDbHelper2.getReadableDatabase();
 
@@ -94,6 +95,8 @@ public class ReturnActivity extends AppCompatActivity {
             returnItemList = new ArrayList<>(Arrays.asList(items));
             Log.d("Hi", "HIIIII");
         }
+
+        displayList();
 
     }
 
