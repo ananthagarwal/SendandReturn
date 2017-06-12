@@ -65,7 +65,7 @@ public class PurchaseActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_purchase);
-
+        setTitle("Purchase Items");
         mDbHelper = new DatabaseHelper(getApplicationContext());
         dbRead = mDbHelper.getReadableDatabase();
 
