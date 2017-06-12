@@ -1,6 +1,7 @@
 package com.example.sendandreturn;
 
 import android.app.Activity;
+import android.app.FragmentTransaction;
 import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Bitmap;
@@ -8,6 +9,7 @@ import android.graphics.BitmapFactory;
 import android.media.Image;
 import android.net.Uri;
 import android.provider.MediaStore;
+import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -15,9 +17,15 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.MapFragment;
+import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.MarkerOptions;
+
 import static com.example.sendandreturn.PurchaseActivity.ADD_ITEM;
 
-public class ItemDetails extends AppCompatActivity {
+public class ItemDetails extends AppCompatActivity implements OnMapReadyCallback {
 
     static final int SELECT_IMAGE = 1;
     private String itemName;
@@ -49,6 +57,25 @@ public class ItemDetails extends AppCompatActivity {
             imageView.setImageBitmap(BitmapFactory.decodeFile(picturePath));
         }
 
+        MapFragment mMapFragment = MapFragment.newInstance();
+        FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
+        fragmentTransaction.add(R.id.map, mMapFragment);
+        fragmentTransaction.commit();
+
+        MapFragment mapFragment = (MapFragment) getFragmentManager()
+                .findFragmentById(R.id.map);
+        mapFragment.getMapAsync(this);
+
+
+
+
+    }
+
+    @Override
+    public void onMapReady(GoogleMap map) {
+        map.addMarker(new MarkerOptions()
+                .position(new LatLng(0, 0))
+                .title("Marker"));
     }
 
     public void openGallery(View view) {
@@ -56,6 +83,11 @@ public class ItemDetails extends AppCompatActivity {
         Intent intent = new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
         startActivityForResult(intent, SELECT_IMAGE);
 
+    }
+
+    public void startMap(View view) {
+        Intent intent = new Intent(this, MapsActivity.class);
+        startActivityForResult(intent, ADD_ITEM);
     }
 
     public void done(View view) {

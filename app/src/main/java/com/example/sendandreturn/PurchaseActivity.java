@@ -6,8 +6,6 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
-import android.graphics.Color;
-import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.os.Parcelable;
 import android.support.annotation.NonNull;
@@ -21,12 +19,6 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
-import android.widget.TextView;
-import android.widget.Toast;
-
-import com.baoyz.swipemenulistview.SwipeMenu;
-import com.baoyz.swipemenulistview.SwipeMenuCreator;
-import com.baoyz.swipemenulistview.SwipeMenuItem;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -122,6 +114,8 @@ public class PurchaseActivity extends AppCompatActivity {
         startActivityForResult(intent, ADD_ITEM);
     }
 
+
+
     public void editItem(View view, PurchaseItem purchaseItem) {
         editedItem = purchaseItem;
         Intent intent = new Intent(this, ItemDetails.class);
@@ -131,7 +125,6 @@ public class PurchaseActivity extends AppCompatActivity {
         intent.putExtra("Notes", purchaseItem.getNotes());
         intent.putExtra("BitmapImage", purchaseItem.getImage());
         startActivityForResult(intent, EDIT_ITEM);
-
     }
 
     @Override
